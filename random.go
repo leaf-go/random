@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+// 有公共Random, 也可以创建新对象 -> 数据源不同
+// 随机 字符串 -> 长度 , 可配置字符串
+
 var (
 	factor = []byte{
 		0x21, 0x22, 0x23, 0x24, 0x2A, 0x2D, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x37, 0x38, 0x39,
@@ -20,8 +23,7 @@ func reseed() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-// D \d
-func D(min, max int) int {
+func Int(min, max int) int {
 	if min == max {
 		return max
 	}
@@ -30,16 +32,16 @@ func D(min, max int) int {
 	return rand.Intn(max-min+1) + min
 }
 
-// LenD \d with length
-func LenD(length int) int {
+// LenInt \d with length
+func LenInt(length int) int {
 	reseed()
 	i := int(math.Pow10(length))
 	min, max := i/10, i-1
-	return D(min, max)
+	return Int(min, max)
 }
 
-// W \w
-func W(length int) string {
+// LenOnceString \w
+func LenOnceString(length int) string {
 	reseed()
 	b := make([]byte, length/2)
 	rand.Read(b)

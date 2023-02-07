@@ -1,3 +1,3 @@
-module leaf-go/random
+module github.com/goantor/random
 
-go 1.19
+go 1.20
