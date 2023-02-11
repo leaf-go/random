@@ -19,8 +19,8 @@ var (
 	}
 )
 
-func reseed() {
-	rand.Seed(time.Now().UnixNano())
+func makeRand() *rand.Rand {
+	return rand.New(rand.NewSource(time.Now().UnixNano()))
 }
 
 func Int(min, max int) int {
@@ -28,13 +28,12 @@ func Int(min, max int) int {
 		return max
 	}
 
-	reseed()
-	return rand.Intn(max-min+1) + min
+	rd := makeRand()
+	return rd.Intn(max-min+1) + min
 }
 
 // LenInt \d with length
 func LenInt(length int) int {
-	reseed()
 	i := int(math.Pow10(length))
 	min, max := i/10, i-1
 	return Int(min, max)
@@ -42,19 +41,19 @@ func LenInt(length int) int {
 
 // LenOnceString \w
 func LenOnceString(length int) string {
-	reseed()
+	rs := makeRand()
 	b := make([]byte, length/2)
-	rand.Read(b)
+	rs.Read(b)
 	return hex.EncodeToString(b)
 }
 
 // Ws \w + sign
 func Ws(n int) string {
-	reseed()
+	rs := makeRand()
 
 	result := make([]byte, n)
 	for i := 0; i < n; i++ {
-		result[i] = factor[rand.Int31()%67]
+		result[i] = factor[rs.Int31()%67]
 	}
 
 	return string(result)
